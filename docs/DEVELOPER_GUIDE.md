@@ -1,6 +1,7 @@
 # SkillSphere Developer Guide
 
 ## 📚 Table of Contents
+
 - [Architecture Overview](#architecture-overview)
 - [Database Schema](#database-schema)
 - [API Reference](#api-reference)
@@ -13,18 +14,21 @@
 SkillSphere follows a modern three-tier architecture:
 
 ### Frontend (React + Vite)
+
 - **Component-Based Architecture**: Reusable UI components with Tailwind CSS
 - **State Management**: Zustand for global state (auth)
 - **API Communication**: Axios with interceptors for token refresh
 - **Routing**: React Router v6 with protected routes
 
 ### Backend (Django + DRF)
+
 - **RESTful API**: Django REST Framework with token authentication
 - **Authentication**: JWT tokens (access + refresh)
 - **Database**: MySQL with Django ORM
 - **File Storage**: Local media storage (configurable for S3)
 
 ### Database (MySQL)
+
 - **Relational Model**: Proper foreign keys and constraints
 - **Indexing**: Strategic indexes for query optimization
 - **Migrations**: Version-controlled schema changes
@@ -32,6 +36,7 @@ SkillSphere follows a modern three-tier architecture:
 ## 📊 Database Schema
 
 ### Users Table
+
 ```sql
 CREATE TABLE users (
     id VARCHAR(36) PRIMARY KEY,
@@ -52,6 +57,7 @@ CREATE TABLE users (
 ```
 
 ### Courses Table
+
 ```sql
 CREATE TABLE courses (
     id VARCHAR(36) PRIMARY KEY,
@@ -75,6 +81,7 @@ CREATE TABLE courses (
 ```
 
 ### Lessons Table
+
 ```sql
 CREATE TABLE lessons (
     id VARCHAR(36) PRIMARY KEY,
@@ -95,6 +102,7 @@ CREATE TABLE lessons (
 ```
 
 ### Enrollments Table
+
 ```sql
 CREATE TABLE enrollments (
     id VARCHAR(36) PRIMARY KEY,
@@ -113,6 +121,7 @@ CREATE TABLE enrollments (
 ```
 
 ### Categories Table
+
 ```sql
 CREATE TABLE categories (
     id VARCHAR(36) PRIMARY KEY,
@@ -124,6 +133,7 @@ CREATE TABLE categories (
 ```
 
 ### Lesson Progress Table
+
 ```sql
 CREATE TABLE lesson_progress (
     id VARCHAR(36) PRIMARY KEY,
@@ -146,6 +156,7 @@ CREATE TABLE lesson_progress (
 ### Authentication Endpoints
 
 #### Register
+
 ```http
 POST /api/users/register/
 Content-Type: application/json
@@ -169,6 +180,7 @@ Response: 201 Created
 ```
 
 #### Login
+
 ```http
 POST /api/users/login/
 Content-Type: application/json
@@ -188,6 +200,7 @@ Response: 200 OK
 ```
 
 #### Refresh Token
+
 ```http
 POST /api/users/refresh/
 Content-Type: application/json
@@ -205,6 +218,7 @@ Response: 200 OK
 ### Course Endpoints
 
 #### List Public Courses
+
 ```http
 GET /api/courses/catalog/
 Query Parameters:
@@ -232,6 +246,7 @@ Response: 200 OK
 ```
 
 #### Create Course (Instructor)
+
 ```http
 POST /api/courses/instructor/create/
 Authorization: Bearer <access_token>
@@ -255,6 +270,7 @@ Response: 201 Created
 ```
 
 #### Approve/Reject Course (Admin)
+
 ```http
 POST /api/courses/admin/approve/{course_id}/
 Authorization: Bearer <access_token>
@@ -275,6 +291,7 @@ Response: 200 OK
 ### Enrollment Endpoints
 
 #### Enroll in Course
+
 ```http
 POST /api/enrollments/enroll/
 Authorization: Bearer <access_token>
@@ -292,6 +309,7 @@ Response: 201 Created
 ```
 
 #### Update Lesson Progress
+
 ```http
 POST /api/enrollments/{enrollment_id}/progress/{lesson_id}/
 Authorization: Bearer <access_token>
@@ -314,6 +332,7 @@ Response: 200 OK
 ## 🔐 Authentication Flow
 
 ### JWT Token Structure
+
 ```
 Access Token (30 min expiry):
 {
@@ -334,6 +353,7 @@ Refresh Token (7 days expiry):
 ```
 
 ### Token Refresh Flow
+
 1. Client makes API request with expired access token
 2. API returns 401 Unauthorized
 3. Axios interceptor catches error
@@ -344,6 +364,7 @@ Refresh Token (7 days expiry):
 ## 🔄 Development Workflow
 
 ### 1. Setting Up Development Environment
+
 ```bash
 # Backend
 cd backend
@@ -359,6 +380,7 @@ npm install
 ```
 
 ### 2. Running Development Servers
+
 ```bash
 # Terminal 1 - Backend
 cd backend
@@ -370,6 +392,7 @@ npm run dev
 ```
 
 ### 3. Making Database Changes
+
 ```bash
 # After modifying models
 python manage.py makemigrations
@@ -380,6 +403,7 @@ python manage.py makemigrations --empty app_name
 ```
 
 ### 4. Testing
+
 ```bash
 # Backend tests
 python manage.py test
@@ -391,6 +415,7 @@ coverage report
 ```
 
 ### 5. Code Quality
+
 ```bash
 # Python linting
 pip install flake8 black
@@ -407,6 +432,7 @@ npm run format
 ### Backend Deployment (Django)
 
 #### 1. Production Settings
+
 ```python
 # settings.py
 DEBUG = False
@@ -417,32 +443,35 @@ CSRF_COOKIE_SECURE = True
 ```
 
 #### 2. Static Files
+
 ```bash
 python manage.py collectstatic
 ```
 
 #### 3. Gunicorn Setup
+
 ```bash
 pip install gunicorn
 gunicorn skillsphere.wsgi:application --bind 0.0.0.0:8000
 ```
 
 #### 4. Nginx Configuration
+
 ```nginx
 server {
     listen 80;
     server_name your-domain.com;
-    
+
     location /api/ {
         proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
-    
+
     location /media/ {
         alias /path/to/media/;
     }
-    
+
     location /static/ {
         alias /path/to/static/;
     }
@@ -452,12 +481,14 @@ server {
 ### Frontend Deployment (React)
 
 #### 1. Build for Production
+
 ```bash
 cd frontend
 npm run build
 ```
 
 #### 2. Deploy to Static Hosting
+
 ```bash
 # Option 1: Netlify
 netlify deploy --prod --dir=dist
@@ -470,6 +501,7 @@ aws s3 sync dist/ s3://your-bucket/
 ```
 
 ### Database Backup
+
 ```bash
 # Backup
 mysqldump -u root -p skillsphere_db > backup.sql
@@ -481,6 +513,7 @@ mysql -u root -p skillsphere_db < backup.sql
 ## 🐛 Debugging Tips
 
 ### Backend Debugging
+
 ```python
 # Django shell
 python manage.py shell
@@ -496,6 +529,7 @@ logger.debug("Debug message")
 ```
 
 ### Frontend Debugging
+
 ```javascript
 // Redux DevTools
 // React DevTools
@@ -506,6 +540,7 @@ logger.debug("Debug message")
 ## 📞 Support
 
 For issues and questions:
+
 - GitHub Issues: https://github.com/Talha-3921/SkillSphere/issues
 - Email: support@skillsphere.com
 
