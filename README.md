@@ -247,44 +247,7 @@ SkillSphere uses a custom design system with the following color palette:
 - `GET /api/enrollments/check/:id/` - Check enrollment status
 - `POST /api/enrollments/:enrollment_id/progress/:lesson_id/` - Update progress
 
-## 🔐 Environment Variables
 
-### Backend (.env)
-
-```env
-DEBUG=True
-SECRET_KEY=your-secret-key
-DB_NAME=skillsphere_db
-DB_USER=root
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=3306
-EMAIL_HOST=smtp.gmail.com
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-```
-
-### Frontend (.env)
-
-```env
-VITE_API_URL=http://localhost:8000/api
-```
-
-## 🧪 Testing
-
-### Backend Tests
-
-```bash
-cd backend
-python manage.py test
-```
-
-### Frontend Tests
-
-```bash
-cd frontend
-npm run test
-```
 
 ## 📝 License
 
