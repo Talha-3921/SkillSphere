@@ -62,64 +62,89 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        <div className="gradient-bg-blue rounded-2xl p-8 shadow-2xl">
+        <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Join SKILLSPHERE</h1>
-            <p className="text-white/80">Create your account and start learning</p>
+            <h1 className="text-3xl font-bold mb-2 text-white" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>Join SKILLSPHERE</h1>
+            <p className="text-[#999999]">Create your account and start learning</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="First Name"
-                name="first_name"
-                value={formData.first_name}
+              <div>
+                <label className="block text-sm font-medium text-[#999999] mb-2">
+                  First Name
+                </label>
+                <input
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#999999] mb-2">
+                  Last Name
+                </label>
+                <input
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-[#999999] mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                required
-              />
-              <Input
-                label="Last Name"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
                 required
               />
             </div>
             
-            <Input
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            
-            <Input
-              label="Password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            
-            <Input
-              label="Confirm Password"
-              type="password"
-              name="password_confirm"
-              value={formData.password_confirm}
-              onChange={handleChange}
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-[#999999] mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                required
+              />
+            </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2">I am a:</label>
+              <label className="block text-sm font-medium text-[#999999] mb-2">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="password_confirm"
+                value={formData.password_confirm}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-[#999999] mb-2">I am a:</label>
               <select
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="input-field"
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
               >
                 <option value="STUDENT">Student</option>
                 <option value="INSTRUCTOR">Instructor</option>
@@ -136,7 +161,7 @@ const Register = () => {
           </form>
           
           <div className="mt-6 text-center">
-            <p className="text-white/80">
+            <p className="text-[#999999]">
               Already have an account?{' '}
               <Link to="/login" className="text-[var(--primary)] hover:underline font-semibold">
                 Login

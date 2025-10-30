@@ -9,9 +9,9 @@ export const CourseCard = ({ course, showStatus = false }) => {
   
   return (
     <Link to={linkPath}>
-      <div className="card hover-lift cursor-pointer h-full">
+      <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-6 hover:border-[#94C705] transition-all cursor-pointer h-full">
         {/* Thumbnail */}
-        <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden bg-[var(--muted)]">
+        <div className="relative w-full h-48 mb-4 rounded-2xl overflow-hidden bg-[var(--muted)]">
           {course.thumbnail_url ? (
             <img
               src={course.thumbnail_url}
@@ -41,11 +41,11 @@ export const CourseCard = ({ course, showStatus = false }) => {
         
         {/* Content */}
         <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-bold text-foreground line-clamp-2">
+          <h3 className="text-lg font-bold text-white line-clamp-2" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
             {course.title}
           </h3>
           
-          <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
+          <p className="text-sm text-[var(--text-secondary)] line-clamp-2" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
             {truncateText(course.description, 100)}
           </p>
           

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { enrollmentsAPI } from '../../lib/api';
-import { CourseCard } from '../../components/ui/CourseCard';
 import { LoadingSpinner } from '../../components/ui/Loading';
 
 const MyCourses = () => {
@@ -38,20 +38,60 @@ const MyCourses = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {enrollments.map((enrollment) => (
-            <div key={enrollment.id}>
-              <CourseCard course={enrollment.course} />
-              <div className="mt-2 px-2">
-                <div className="w-full bg-[var(--muted)] rounded-full h-2">
-                  <div
-                    className="bg-[var(--primary)] h-2 rounded-full transition-all"
-                    style={{ width: `${enrollment.progress}%` }}
-                  />
+            <Link key={enrollment.id} to={`/courses/${enrollment.course.id}`}>
+              <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-6 hover:border-[#94C705] transition-all cursor-pointer h-full flex flex-col">
+                {/* Thumbnail */}
+                <div className="relative w-full h-48 mb-4 rounded-2xl overflow-hidden bg-[var(--muted)]">
+                  {enrollment.course.thumbnail_url ? (
+                    <img
+                      src={enrollment.course.thumbnail_url}
+                      alt={enrollment.course.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-[var(--text-secondary)]">No image</span>
+                    </div>
+                  )}
+                  
+                  {enrollment.course.is_free && (
+                    <div className="absolute top-3 right-3 bg-[var(--primary)] text-black px-3 py-1 rounded-full text-xs font-bold">
+                      FREE
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-[var(--text-secondary)] mt-1">
-                  {enrollment.progress}% complete
-                </p>
+                
+                {/* Content */}
+                <div className="flex flex-col gap-2 flex-1">
+                  <h3 className="text-lg font-bold text-white line-clamp-2" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+                    {enrollment.course.title}
+                  </h3>
+                  
+                  <p className="text-sm text-[var(--text-secondary)] line-clamp-2" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+                    {enrollment.course.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-sm text-[var(--text-secondary)]">
+                      {enrollment.course.instructor_name || enrollment.course.instructor?.full_name}
+                    </span>
+                  </div>
+                  
+                  {/* Progress Bar at the end */}
+                  <div className="mt-auto pt-4">
+                    <div className="w-full bg-[#0F0F0F] rounded-full h-2 mb-2">
+                      <div
+                        className="bg-[var(--primary)] h-2 rounded-full transition-all"
+                        style={{ width: `${enrollment.progress}%` }}
+                      />
+                    </div>
+                    <p className="text-sm text-[var(--text-secondary)] text-right">
+                      {enrollment.progress}% complete
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
 import { coursesAPI } from '../../lib/api';
-import { BookOpen, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle, XCircle, Users, DollarSign } from 'lucide-react';
+import { StatsCard } from '../../components/ui/StatsCard';
 
 const AdminDashboard = () => {
+  const { user } = useAuthStore();
   const [stats, setStats] = useState(null);
   
   useEffect(() => {
@@ -21,63 +23,64 @@ const AdminDashboard = () => {
   
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-      
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <BookOpen className="text-[var(--primary)]" size={24} />
-            <p className="text-sm text-[var(--text-secondary)]">TOTAL COURSES</p>
-          </div>
-          <p className="text-3xl font-bold">{stats?.total_courses || 0}</p>
-        </div>
-        
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <Clock className="text-yellow-500" size={24} />
-            <p className="text-sm text-[var(--text-secondary)]">PENDING APPROVAL</p>
-          </div>
-          <p className="text-3xl font-bold text-yellow-500">{stats?.pending_courses || 0}</p>
-        </div>
-        
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle className="text-green-500" size={24} />
-            <p className="text-sm text-[var(--text-secondary)]">APPROVED</p>
-          </div>
-          <p className="text-3xl font-bold text-green-500">{stats?.approved_courses || 0}</p>
-        </div>
-        
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <XCircle className="text-red-500" size={24} />
-            <p className="text-sm text-[var(--text-secondary)]">REJECTED</p>
-          </div>
-          <p className="text-3xl font-bold text-red-500">{stats?.rejected_courses || 0}</p>
-        </div>
+      {/* Welcome Section */}
+      <div>
+        <h1 className="text-4xl font-bold mb-2">Good Morning, {user?.first_name}!</h1>
+        <p className="text-[var(--text-secondary)]">Welcome back to your admin dashboard</p>
       </div>
       
-      {/* Quick Actions */}
-      <div className="card">
-        <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
-        <div className="space-y-3">
-          <Link to="/admin/pending-courses" className="block">
-            <div className="p-4 bg-[var(--muted)] rounded-lg hover:bg-[var(--muted)]/70 transition-all">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold">Review Pending Courses</h3>
-                  <p className="text-sm text-[var(--text-secondary)]">
-                    {stats?.pending_courses || 0} courses waiting for approval
-                  </p>
-                </div>
-                <div className="text-yellow-500 font-bold text-2xl">
-                  {stats?.pending_courses || 0}
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+      {/* Stats Row 1 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatsCard 
+          icon={BookOpen}
+          label="Total courses"
+          value={stats?.total_courses || 0}
+          iconColor="text-[#94C705]"
+          valueColor="text-[#94C705]"
+        />
+        
+        <StatsCard 
+          icon={Users}
+          label="Total users"
+          value={stats?.total_users || 0}
+          iconColor="text-blue-500"
+          valueColor="text-blue-500"
+        />
+        
+        <StatsCard 
+          icon={DollarSign}
+          label="Total revenue"
+          value={`$${stats?.total_revenue || 0}`}
+          iconColor="text-green-500"
+          valueColor="text-green-500"
+        />
+      </div>
+      
+      {/* Stats Row 2 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatsCard 
+          icon={Clock}
+          label="Pending approval"
+          value={stats?.pending_courses || 0}
+          iconColor="text-yellow-500"
+          valueColor="text-yellow-500"
+        />
+        
+        <StatsCard 
+          icon={CheckCircle}
+          label="Approved"
+          value={stats?.approved_courses || 0}
+          iconColor="text-green-500"
+          valueColor="text-green-500"
+        />
+        
+        <StatsCard 
+          icon={XCircle}
+          label="Rejected"
+          value={stats?.rejected_courses || 0}
+          iconColor="text-red-500"
+          valueColor="text-red-500"
+        />
       </div>
     </div>
   );

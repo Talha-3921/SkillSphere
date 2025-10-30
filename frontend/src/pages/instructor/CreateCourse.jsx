@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { coursesAPI } from '../../lib/api';
-import { Input, TextArea } from '../../components/ui/Input';
-import { Button } from '../../components/ui/Button';
 import toast from 'react-hot-toast';
 
 const CreateCourse = () => {
@@ -20,15 +18,23 @@ const CreateCourse = () => {
   });
   
   useEffect(() => {
+    console.log('CreateCourse component mounted');
     fetchCategories();
+    
+    return () => {
+      console.log('CreateCourse component unmounting');
+    };
   }, []);
   
   const fetchCategories = async () => {
     try {
       const response = await coursesAPI.getCategories();
-      setCategories(response.data);
+      console.log('Categories fetched:', response.data);
+      // Extract the results array from the paginated response
+      setCategories(response.data.results || response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      toast.error('Failed to load categories');
     }
   };
   
@@ -69,97 +75,127 @@ const CreateCourse = () => {
     }
   };
   
+  console.log('Rendering CreateCourse, categories:', categories.length);
+  
   return (
-    <div className="max-w-4xl">
-      <h1 className="text-4xl font-bold mb-8">Create New Course</h1>
+    <div className="max-w-4xl mx-auto p-6" style={{backgroundColor: '#1a1a1a', minHeight: '100vh'}}>
+      <h1 className="text-4xl font-bold mb-8 text-white" style={{color: 'white'}}>Create New Course</h1>
       
-      <form className="space-y-6">
-        <Input
-          label="Course Title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Enter course title"
-          required
-        />
-        
-        <TextArea
-          label="Description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Describe what students will learn"
-          rows={5}
-          required
-        />
-        
-        <TextArea
-          label="Syllabus"
-          name="syllabus"
-          value={formData.syllabus}
-          onChange={handleChange}
-          placeholder="Course outline and topics covered"
-          rows={5}
-        />
-        
-        <div className="grid grid-cols-2 gap-6">
+      <div className="bg-[#161616] border border-[#2a2a2a] rounded-lg p-8" style={{backgroundColor: '#161616', border: '1px solid #2a2a2a'}}>
+        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          {/* Course Title */}
           <div>
-            <label className="block text-sm font-medium mb-2">Category</label>
-            <select
-              name="category"
-              value={formData.category}
+            <label className="block text-sm font-medium mb-2 text-white">
+              Course Title *
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
               onChange={handleChange}
-              className="input-field"
+              placeholder="Enter course title"
               required
-            >
-              <option value="">Select Category</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#94C705]"
+            />
           </div>
           
-          <Input
-            label="Price (USD)"
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="0 for free"
-            min="0"
-            step="0.01"
-          />
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium mb-2">Course Thumbnail</label>
-          <input
-            type="file"
-            name="thumbnail_url"
-            onChange={handleChange}
-            accept="image/*"
-            className="input-field"
-          />
-        </div>
-        
-        <div className="flex gap-4">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={(e) => handleSubmit(e, 'DRAFT')}
-            disabled={loading}
-          >
-            Save as Draft
-          </Button>
-          <Button
-            type="button"
-            onClick={(e) => handleSubmit(e, 'PENDING')}
-            disabled={loading}
-          >
-            Submit for Approval
-          </Button>
-        </div>
-      </form>
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white">
+              Description *
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Describe what students will learn"
+              rows={5}
+              required
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#94C705] resize-vertical"
+            />
+          </div>
+          
+          {/* Syllabus */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white">
+              Syllabus
+            </label>
+            <textarea
+              name="syllabus"
+              value={formData.syllabus}
+              onChange={handleChange}
+              placeholder="Course outline and topics covered"
+              rows={5}
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#94C705] resize-vertical"
+            />
+          </div>
+          
+          {/* Category and Price */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white">Category *</label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#94C705]"
+                required
+              >
+                <option value="">Select Category</option>
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2 text-white">Price (USD)</label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="0 for free"
+                min="0"
+                step="0.01"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#94C705]"
+              />
+            </div>
+          </div>
+          
+          {/* Thumbnail */}
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white">Course Thumbnail</label>
+            <input
+              type="file"
+              name="thumbnail_url"
+              onChange={handleChange}
+              accept="image/*"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#94C705] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#94C705] file:text-black file:cursor-pointer hover:file:opacity-90"
+            />
+          </div>
+          
+          {/* Buttons */}
+          <div className="flex gap-4 pt-4">
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e, 'DRAFT')}
+              disabled={loading}
+              className="px-6 py-3 bg-[#2a2a2a] text-[#94C705] border-2 border-[#94C705] rounded-lg font-semibold hover:bg-[#94C705] hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Saving...' : 'Save as Draft'}
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e, 'PENDING')}
+              disabled={loading}
+              className="px-6 py-3 bg-[#94C705] text-black rounded-lg font-semibold hover:opacity-90 hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Submitting...' : 'Submit for Approval'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

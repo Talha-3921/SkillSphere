@@ -104,6 +104,8 @@ class PublicCourseListView(generics.ListAPIView):
         
         # Multiple category filter
         categories = self.request.query_params.getlist('category')
+        # Filter out empty strings
+        categories = [cat for cat in categories if cat and cat.strip()]
         if categories:
             queryset = queryset.filter(category__id__in=categories)
         

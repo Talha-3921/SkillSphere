@@ -45,33 +45,43 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-md">
-        {/* Card with Gradient Background */}
-        <div className="gradient-bg-blue rounded-2xl p-8 shadow-2xl">
+        {/* Card */}
+        <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-8 shadow-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">SKILLSPHERE</h1>
-            <p className="text-white/80">Welcome back! Please login to continue</p>
+            <h1 className="text-3xl font-bold mb-2 text-white" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>SKILLSPHERE</h1>
+            <p className="text-[#999999]">Welcome back! Please login to continue</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Input
-              label="Email or Username"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-[#999999] mb-2">
+                Email or Username
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                required
+              />
+            </div>
             
-            <Input
-              label="Password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium text-[#999999] mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 bg-[var(--input)] border border-[var(--border)] rounded-lg text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-transparent transition-all"
+                required
+              />
+            </div>
             
             <div className="text-right">
               <Link 
@@ -92,7 +102,7 @@ const Login = () => {
           </form>
           
           <div className="mt-6 text-center">
-            <p className="text-white/80">
+            <p className="text-[#999999]">
               Don't have an account?{' '}
               <Link to="/register" className="text-[var(--primary)] hover:underline font-semibold">
                 Sign up

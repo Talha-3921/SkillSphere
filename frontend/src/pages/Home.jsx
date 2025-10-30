@@ -1,25 +1,26 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Users, Award } from 'lucide-react';
+import { ArrowRight, Cpu, Gem, PenTool } from 'lucide-react';
 
 const Home = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-24">
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-20">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-6xl font-bold mb-6">
-            Create <span className="text-[var(--primary)]">Presentations</span>
-            <br />in Seconds
+      <section className="container mx-auto px-6 py-28 min-h-[85vh] flex items-center">
+        <div className="text-center max-w-5xl mx-auto w-full">
+          <h1 className="text-7xl font-bold mb-8 text-white leading-tight" style={{fontFamily: "'Suisse Int'l', sans-serif", fontWeight: 700}}>
+            Learn. Grow. Excel.
+            <br />
+            <span className="text-[var(--primary)]">Your Journey Starts Here</span>
           </h1>
-          <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
-            AI-powered presentation builder with premium templates,
-            real-time collaboration, and professional export options.
+          <p className="text-xl text-[var(--text-secondary)] mb-10 max-w-3xl mx-auto leading-relaxed" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+            Transform your skills with expert-led courses, interactive learning, 
+            and a community of ambitious learners just like you.
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <Link to="/register" className="btn-primary flex items-center gap-2">
-              Get Started <ArrowRight size={20} />
+          <div className="flex items-center justify-center gap-5">
+            <Link to="/register" className="btn-primary flex items-center gap-3 text-lg px-10 py-4 rounded-2xl">
+              Get Started <ArrowRight size={22} />
             </Link>
-            <Link to="/courses" className="btn-secondary">
+            <Link to="/courses" className="bg-[#202020] text-white text-lg px-10 py-4 rounded-2xl transition-all">
               Browse Courses
             </Link>
           </div>
@@ -28,35 +29,56 @@ const Home = () => {
       
       {/* Features Section */}
       <section className="container mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="card text-center">
-            <div className="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <BookOpen className="text-[var(--primary)]" size={32} />
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Card 1 - AI-Powered Content */}
+          <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-12 hover:border-[#94C705] transition-all">
+            <div className="flex flex-col items-start">
+              <div className="w-28 h-28 bg-[#0F0F0F] border border-[#252525] rounded-full flex items-center justify-center mb-14">
+                <Cpu className="text-[var(--primary)]" size={50} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white" style={{fontFamily: "'Suisse Int'l', sans-serif", fontWeight: 700}}>
+                  AI-Powered Learning
+                </h3>
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+                  Experience personalized course recommendations and adaptive learning paths powered by advanced AI technology.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Expert Instructors</h3>
-            <p className="text-[var(--text-secondary)]">
-              Learn from industry professionals with years of experience
-            </p>
           </div>
           
-          <div className="card text-center">
-            <div className="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Users className="text-[var(--primary)]" size={32} />
+          {/* Card 2 - Premium Templates */}
+          <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-12 hover:border-[#94C705] transition-all">
+            <div className="flex flex-col items-start">
+              <div className="w-28 h-28 bg-[#0F0F0F] border border-[#252525] rounded-full flex items-center justify-center mb-14">
+                <Gem className="text-[var(--primary)]" size={50} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white" style={{fontFamily: "'Suisse Int'l', sans-serif", fontWeight: 700}}>
+                  Premium Courses
+                </h3>
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+                  Access hundreds of professionally designed courses created by industry experts and top instructors.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Community Learning</h3>
-            <p className="text-[var(--text-secondary)]">
-              Join a thriving community of learners and collaborate
-            </p>
           </div>
           
-          <div className="card text-center">
-            <div className="w-16 h-16 bg-[var(--primary)]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Award className="text-[var(--primary)]" size={32} />
+          {/* Card 3 - Advanced Editor */}
+          <div className="bg-[#161616] border-2 border-[#252525] rounded-3xl p-12 hover:border-[#94C705] transition-all">
+            <div className="flex flex-col items-start">
+              <div className="w-28 h-28 bg-[#0F0F0F] border border-[#252525] rounded-full flex items-center justify-center mb-14">
+                <PenTool className="text-[var(--primary)]" size={50} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white" style={{fontFamily: "'Suisse Int'l', sans-serif", fontWeight: 700}}>
+                  Interactive Experience
+                </h3>
+                <p className="text-lg text-[var(--text-secondary)] leading-relaxed" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>
+                  Enjoy smooth, intuitive learning with advanced progress tracking and interactive course materials.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Get Certified</h3>
-            <p className="text-[var(--text-secondary)]">
-              Earn certificates upon completion to showcase your skills
-            </p>
           </div>
         </div>
       </section>

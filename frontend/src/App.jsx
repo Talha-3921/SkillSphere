@@ -20,6 +20,7 @@ import MyCourses from './pages/student/MyCourses';
 
 // Instructor Pages
 import InstructorDashboard from './pages/instructor/InstructorDashboard';
+import InstructorMyCourses from './pages/instructor/MyCourses';
 import CreateCourse from './pages/instructor/CreateCourse';
 import EditCourse from './pages/instructor/EditCourse';
 
@@ -98,6 +99,7 @@ function App() {
           }
         >
           <Route index element={<InstructorDashboard />} />
+          <Route path="my-courses" element={<InstructorMyCourses />} />
           <Route path="create-course" element={<CreateCourse />} />
           <Route path="edit-course/:id" element={<EditCourse />} />
         </Route>

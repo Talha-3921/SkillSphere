@@ -1,10 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { Home, BookOpen, Users, Compass, User, LogOut } from 'lucide-react';
 
 export const Navigation = () => {
   const { user, isAuthenticated, clearAuth } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const handleLogout = () => {
     clearAuth();
@@ -19,66 +20,63 @@ export const Navigation = () => {
     return '/';
   };
   
+  const getHomeLink = () => {
+    if (isAuthenticated) return getDashboardLink();
+    return '/';
+  };
+  
+  const isActive = (path) => {
+    if (path === '/' && isAuthenticated) {
+      // When logged in, home icon should be active on dashboard pages
+      return location.pathname === getDashboardLink();
+    }
+    return location.pathname === path;
+  };
+  
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/95 backdrop-blur-sm border-b border-[var(--border)]">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[var(--primary)] rounded-lg flex items-center justify-center">
-              <span className="text-black font-bold text-xl">S</span>
+          <Link to={getHomeLink()} className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-[#0F0F0F] border border-[#252525] rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-2xl">S</span>
             </div>
-            <span className="text-xl font-bold text-foreground">SKILLSPHERE</span>
+            <span className="text-2xl font-bold text-white" style={{fontFamily: "'Suisse Int'l', sans-serif"}}>SKILLSPHERE</span>
           </Link>
           
           {/* Center Navigation - Icon Based */}
-          <div className="hidden md:flex items-center gap-2 bg-[var(--card-fill)] px-4 py-2 rounded-full">
-            <Link to="/" className="nav-link p-3 rounded-full" title="Home">
-              <Home size={20} />
+          <div className="hidden md:flex items-center gap-6 bg-[#202020] px-6 py-2 rounded-2xl absolute left-1/2 transform -translate-x-1/2">
+            <Link to={getHomeLink()} className={`px-4 py-2 rounded-2xl hover:bg-white transition-all group ${isActive('/') ? 'bg-white' : ''}`} title={isAuthenticated ? "Dashboard" : "Home"}>
+              <Home size={24} className={`transition-colors ${isActive('/') ? 'text-black' : 'text-white group-hover:text-black'}`} strokeWidth={2.5} />
             </Link>
-            <Link to="/courses" className="nav-link p-3 rounded-full" title="Courses">
-              <BookOpen size={20} />
+            <Link to="/courses" className={`px-4 py-2 rounded-2xl hover:bg-white transition-all group ${isActive('/courses') ? 'bg-white' : ''}`} title="Courses">
+              <BookOpen size={24} className={`transition-colors ${isActive('/courses') ? 'text-black' : 'text-white group-hover:text-black'}`} strokeWidth={2.5} />
             </Link>
-            <Link to="#" className="nav-link p-3 rounded-full" title="Community">
-              <Users size={20} />
+            <Link to="#" className="px-4 py-2 rounded-2xl hover:bg-white transition-all group" title="Community">
+              <Users size={24} className="text-white group-hover:text-black transition-colors" strokeWidth={2.5} />
             </Link>
-            <Link to="#" className="nav-link p-3 rounded-full" title="Resources">
-              <Compass size={20} />
+            <Link to="#" className="px-4 py-2 rounded-2xl hover:bg-white transition-all group" title="Resources">
+              <Compass size={24} className="text-white group-hover:text-black transition-colors" strokeWidth={2.5} />
             </Link>
           </div>
           
           {/* Right Navigation */}
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
-              <>
-                <Link 
-                  to={getDashboardLink()}
-                  className="bg-[var(--card-fill)] px-4 py-2 rounded-full hover:bg-[var(--muted)] transition-all"
-                >
-                  <User size={20} />
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="bg-[var(--card-fill)] px-4 py-2 rounded-full hover:bg-[var(--muted)] transition-all"
-                >
-                  <LogOut size={20} />
-                </button>
-              </>
+              <button
+                onClick={handleLogout}
+                className="bg-[#202020] px-8 py-3 rounded-2xl hover:bg-[var(--muted)] transition-all text-white text-lg"
+              >
+                Sign Out
+              </button>
             ) : (
-              <>
-                <Link 
-                  to="/login"
-                  className="bg-[var(--card-fill)] px-6 py-2 rounded-full hover:bg-[var(--muted)] transition-all"
-                >
-                  Sign In
-                </Link>
-                <Link 
-                  to="/register"
-                  className="bg-[var(--primary)] text-black px-6 py-2 rounded-full hover:opacity-90 transition-all font-semibold"
-                >
-                  Get Started
-                </Link>
-              </>
+              <Link 
+                to="/login"
+                className="bg-[#202020] px-8 py-3 rounded-2xl hover:bg-[var(--muted)] transition-all text-white text-lg"
+              >
+                Sign In
+              </Link>
             )}
           </div>
         </div>
