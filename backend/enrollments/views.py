@@ -12,7 +12,44 @@ from .serializers import (
     LessonProgressSerializer, LessonProgressUpdateSerializer
 )
 from users.permissions import IsStudent
+from users.authentication import JWTAuthentication as CustomJWTAuthentication
 from courses.models import Course
+
+
+class MockPaymentView(APIView):
+    """Mock payment endpoint for course enrollment."""
+    
+    permission_classes = [IsStudent]
+    authentication_classes = [CustomJWTAuthentication]
+    
+    def post(self, request):
+        course_id = request.data.get('course')
+        amount = request.data.get('amount')
+        transaction_id = request.data.get('transaction_id')
+        
+        if not course_id:
+            return Response({'error': 'Course ID required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            course = Course.objects.get(id=course_id)
+        except Course.DoesNotExist:
+            return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if already enrolled
+        if Enrollment.objects.filter(student=request.user, course=course).exists():
+            return Response({'error': 'Already enrolled'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create enrollment (mock payment always succeeds)
+        enrollment = Enrollment.objects.create(
+            student=request.user,
+            course=course
+        )
+        
+        return Response({
+            'message': 'Payment successful',
+            'enrollment': EnrollmentSerializer(enrollment).data,
+            'transaction_id': transaction_id
+        }, status=status.HTTP_201_CREATED)
 
 
 class EnrollCourseView(APIView):

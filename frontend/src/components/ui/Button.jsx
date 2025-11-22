@@ -5,6 +5,8 @@ export const Button = React.forwardRef(({
   className, 
   variant = 'primary', 
   size = 'default',
+  fullWidth,
+  loading,
   children, 
   ...props 
 }, ref) => {
@@ -27,12 +29,21 @@ export const Button = React.forwardRef(({
   return (
     <button
       ref={ref}
-      className={cn(baseStyles, variants[variant], sizes[size], className)}
+      className={cn(
+        baseStyles, 
+        variants[variant], 
+        sizes[size], 
+        fullWidth && 'w-full',
+        className
+      )}
+      disabled={loading || props.disabled}
       {...props}
     >
-      {children}
+      {loading ? 'Loading...' : children}
     </button>
   );
 });
 
 Button.displayName = 'Button';
+
+export default Button;

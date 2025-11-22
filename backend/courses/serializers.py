@@ -1,6 +1,9 @@
 """Serializers for courses app."""
 from rest_framework import serializers
-from .models import Category, Course, Lesson
+from .models import (
+    Category, Course, Lesson, Video, Assignment, Quiz, 
+    Question, Submission, Progress, Payment
+)
 from users.serializers import UserSerializer
 
 
@@ -197,3 +200,162 @@ class CourseApprovalSerializer(serializers.ModelSerializer):
             })
         
         return attrs
+
+
+# Sprint 2 Serializers
+class VideoSerializer(serializers.ModelSerializer):
+    """Serializer for Video model."""
+    
+    class Meta:
+        model = Video
+        fields = [
+            'id', 'lesson', 'video_url', 'video_type', 'duration',
+            'thumbnail_url', 'storage_provider', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class AssignmentSerializer(serializers.ModelSerializer):
+    """Serializer for Assignment model."""
+    
+    course_title = serializers.CharField(source='course.title', read_only=True)
+    submission_count = serializers.SerializerMethodField()
+    has_submitted = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Assignment
+        fields = [
+            'id', 'course', 'course_title', 'title', 'description',
+            'instructions', 'deadline', 'max_score', 'submission_count',
+            'has_submitted', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+    
+    def get_submission_count(self, obj):
+        """Get number of submissions for this assignment."""
+        return obj.submissions.count()
+    
+    def get_has_submitted(self, obj):
+        """Check if current user has submitted this assignment."""
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.submissions.filter(student=request.user).exists()
+        return False
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """Serializer for Question model."""
+    
+    class Meta:
+        model = Question
+        fields = [
+            'id', 'quiz', 'question_text', 'option_a', 'option_b',
+            'option_c', 'option_d', 'correct_answer', 'points', 'order',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class QuestionListSerializer(serializers.ModelSerializer):
+    """Serializer for Question list (without correct answer for students)."""
+    
+    class Meta:
+        model = Question
+        fields = [
+            'id', 'quiz', 'question_text', 'option_a', 'option_b',
+            'option_c', 'option_d', 'points', 'order'
+        ]
+        read_only_fields = ['id']
+
+
+class QuizSerializer(serializers.ModelSerializer):
+    """Serializer for Quiz model."""
+    
+    course_title = serializers.CharField(source='course.title', read_only=True)
+    question_count = serializers.SerializerMethodField()
+    total_points = serializers.SerializerMethodField()
+    has_completed = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Quiz
+        fields = [
+            'id', 'course', 'course_title', 'title', 'description',
+            'duration', 'passing_score', 'max_attempts', 'question_count',
+            'total_points', 'has_completed', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+    
+    def get_question_count(self, obj):
+        """Get number of questions in this quiz."""
+        return obj.questions.count()
+    
+    def get_total_points(self, obj):
+        """Get total points available in this quiz."""
+        return sum(q.points for q in obj.questions.all())
+    
+    def get_has_completed(self, obj):
+        """Check if the current user has completed this quiz."""
+        request = self.context.get('request')
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            return obj.sprint2_progress.filter(
+                enrollment__student=request.user,
+                completed=True
+            ).exists()
+        return False
+
+
+class QuizDetailSerializer(QuizSerializer):
+    """Serializer for Quiz detail with questions."""
+    
+    questions = QuestionListSerializer(many=True, read_only=True)
+    
+    class Meta(QuizSerializer.Meta):
+        fields = QuizSerializer.Meta.fields + ['questions']
+
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    """Serializer for Submission model."""
+    
+    student_name = serializers.CharField(source='student.full_name', read_only=True)
+    assignment_title = serializers.CharField(source='assignment.title', read_only=True)
+    
+    class Meta:
+        model = Submission
+        fields = [
+            'id', 'assignment', 'assignment_title', 'student', 'student_name',
+            'file_url', 'submission_date', 'grade', 'feedback', 'status',
+            'graded_at', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'submission_date', 'created_at', 'updated_at']
+
+
+class ProgressSerializer(serializers.ModelSerializer):
+    """Serializer for Progress model."""
+    
+    lesson_title = serializers.CharField(source='lesson.title', read_only=True)
+    quiz_title = serializers.CharField(source='quiz.title', read_only=True)
+    
+    class Meta:
+        model = Progress
+        fields = [
+            'id', 'enrollment', 'lesson', 'lesson_title', 'quiz', 'quiz_title',
+            'completed', 'completion_date', 'quiz_score', 'quiz_attempts',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    """Serializer for Payment model."""
+    
+    student_name = serializers.CharField(source='student.full_name', read_only=True)
+    course_title = serializers.CharField(source='course.title', read_only=True)
+    
+    class Meta:
+        model = Payment
+        fields = [
+            'id', 'student', 'student_name', 'course', 'course_title',
+            'amount', 'payment_method', 'transaction_id', 'status',
+            'payment_date', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'payment_date', 'created_at', 'updated_at']

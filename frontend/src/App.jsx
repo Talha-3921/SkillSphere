@@ -17,12 +17,17 @@ import CourseDetail from './pages/courses/CourseDetail';
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
 import MyCourses from './pages/student/MyCourses';
+import CourseLearning from './pages/student/CourseLearning';
+import TakeQuiz from './pages/student/TakeQuiz';
+import PaymentPage from './pages/student/PaymentPage';
+import SubmitAssignment from './pages/student/SubmitAssignment';
 
 // Instructor Pages
 import InstructorDashboard from './pages/instructor/InstructorDashboard';
 import InstructorMyCourses from './pages/instructor/MyCourses';
 import CreateCourse from './pages/instructor/CreateCourse';
 import EditCourse from './pages/instructor/EditCourse';
+import CourseContent from './pages/instructor/CourseContent';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -87,6 +92,10 @@ function App() {
         >
           <Route index element={<StudentDashboard />} />
           <Route path="my-courses" element={<MyCourses />} />
+          <Route path="courses/:courseId/learn" element={<CourseLearning />} />
+          <Route path="quizzes/:quizId/take" element={<TakeQuiz />} />
+          <Route path="courses/:courseId/payment" element={<PaymentPage />} />
+          <Route path="assignments/:assignmentId/submit" element={<SubmitAssignment />} />
         </Route>
         
         {/* Instructor Routes */}
@@ -102,6 +111,7 @@ function App() {
           <Route path="my-courses" element={<InstructorMyCourses />} />
           <Route path="create-course" element={<CreateCourse />} />
           <Route path="edit-course/:id" element={<EditCourse />} />
+          <Route path="courses/:courseId/content" element={<CourseContent />} />
         </Route>
         
         {/* Admin Routes */}

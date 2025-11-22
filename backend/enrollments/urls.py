@@ -3,12 +3,13 @@ from django.urls import path
 from .views import (
     EnrollCourseView, MyEnrollmentsView, EnrollmentDetailView,
     CheckEnrollmentView, LessonProgressListView, LessonProgressUpdateView,
-    student_dashboard_stats
+    student_dashboard_stats, MockPaymentView
 )
 
 urlpatterns = [
     # Enrollment
     path('enroll/', EnrollCourseView.as_view(), name='enroll-course'),
+    path('payment/', MockPaymentView.as_view(), name='mock-payment'),
     path('my-courses/', MyEnrollmentsView.as_view(), name='my-enrollments'),
     path('<uuid:id>/', EnrollmentDetailView.as_view(), name='enrollment-detail'),
     path('check/<uuid:course_id>/', CheckEnrollmentView.as_view(), name='check-enrollment'),

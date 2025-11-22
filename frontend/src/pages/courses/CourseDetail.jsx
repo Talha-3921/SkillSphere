@@ -45,7 +45,7 @@ const CourseDetail = () => {
     }
     
     if (course.price > 0) {
-      toast.error('Payment integration coming soon');
+      navigate(`/student/courses/${id}/payment`);
       return;
     }
     
